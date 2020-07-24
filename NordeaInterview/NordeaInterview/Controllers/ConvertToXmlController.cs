@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using NordeaInterview.Properties;
 
 namespace NordeaInterview.Controllers
 {
@@ -35,30 +36,37 @@ namespace NordeaInterview.Controllers
         {
             public async Task<string> Handle(ConvertToXmlCommand request, CancellationToken cancellationToken)
             {
+                if (string.IsNullOrEmpty(request.Text))
+                {
+                    return Resource.XmlError;
+                }
+
                 var stringBuilder = new StringBuilder();
 
                 using (var writer = XmlWriter.Create(stringBuilder))
                 {
-                    writer.WriteStartDocument();
-                    writer.WriteStartElement("text");
+                    writer.WriteStartElement(Resource.Text);
 
-                    var sentennces = request.Text.Split('.');
-                    foreach (var sentennce in sentennces)
+                    var sentences = request.Text.Split('.')
+                        .Where(words => !string.IsNullOrEmpty(words));
+
+                    foreach (var sentence in sentences)
                     {
-                        var words = sentennce.Split(' ').OrderBy(x => x);
+                        var words = sentence.Split(' ')
+                            .OrderBy(x => x)
+                            .Where(word => !string.IsNullOrEmpty(word)).ToList();
+
                         if(words.Any())
                         {
-                            writer.WriteStartElement("sentence");
+                            writer.WriteStartElement(Resource.Sentence);
                             foreach (var word in words)
                             {
-                                if (string.IsNullOrEmpty(word)) continue;
-                                writer.WriteElementString(nameof(word), word.Trim('.',','));
+                                writer.WriteElementString(Resource.Word, word.Trim('.',','));
                             }
                             writer.WriteEndElement();
                         }
                     }
                     writer.WriteEndElement();
-                    writer.WriteEndDocument();
                     writer.Flush();
                 }
                 await Task.CompletedTask;
