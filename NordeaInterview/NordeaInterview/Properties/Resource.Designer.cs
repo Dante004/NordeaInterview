@@ -61,6 +61,15 @@ namespace NordeaInterview.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have to send text to generate Csv.
+        /// </summary>
+        public static string CsvError {
+            get {
+                return ResourceManager.GetString("CsvError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sentence.
         /// </summary>
         public static string Sentence {
@@ -84,6 +93,15 @@ namespace NordeaInterview.Properties {
         public static string Word {
             get {
                 return ResourceManager.GetString("Word", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have to send text to generate Xml.
+        /// </summary>
+        public static string XmlError {
+            get {
+                return ResourceManager.GetString("XmlError", resourceCulture);
             }
         }
     }
